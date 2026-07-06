@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>AI Football Predictor</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial;
+    background: linear-gradient(135deg,#000,#1a1a1a);
+    color: gold;
+    text-align: center;
+}
+
+.header {
+    padding: 20px;
+    font-size: 26px;
+    font-weight: bold;
+}
+
+.card {
+    background: #111;
+    margin: 20px;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 0 10px gold;
+}
+
+button {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 10px;
+    background: gold;
+    color: black;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.result {
+    margin-top: 15px;
+    font-size: 18px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">⚽ AI FOOTBALL PREDICTOR</div>
+
+<div class="card">
+    <h3>Manchester United vs Liverpool</h3>
+    <button onclick="predict()">🤖 วิเคราะห์ AI</button>
+
+    <div class="result" id="result"></div>
+</div>
+
+<script>
+function predict() {
+    let home = Math.floor(Math.random() * 40 + 30);
+    let draw = Math.floor(Math.random() * 20 + 10);
+    let away = 100 - home - draw;
+
+    document.getElementById("result").innerHTML =
+    "🏠 แมนยูชนะ: " + home + "%<br>" +
+    "🤝 เสมอ: " + draw + "%<br>" +
+    "🚀 ลิเวอร์พูลชนะ: " + away + "%<br><br>" +
+    "🎯 สกอร์คาดการณ์: 2 - 1";
+}
+</script>
+
+</body>
+  </html>
