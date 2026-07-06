@@ -1,73 +1,67 @@
-<!DOCTYPE html>
-<html lang="en">
+here<!DOCTYPE html>
+<html lang="th">
 <head>
 <meta charset="UTF-8">
-<title>AI Football Predictor</title>
-<met.a name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Football Fixtures</title>
 
 <style>
-body {
-    margin: 0;
-    font-family: Arial;
-    background: linear-gradient(135deg,#000,#1a1a1a);
-    color: gold;
-    text-align: center;
+body{
+    background:#111;
+    color:#fff;
+    font-family:Arial,sans-serif;
+    text-align:center;
+    padding:20px;
 }
-
-.header {
-    padding: 20px;
-    font-size: 26px;
-    font-weight: bold;
-}
-
-.card {
-    background: #111;
-    margin: 20px;
-    padding: 20px;
-    border-radius: 15px;
-    box-shadow: 0 0 10px gold;
-}
-
-button {
-    padding: 12px 20px;
-    border: none;
-    border-radius: 10px;
-    background: gold;
-    color: black;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.result {
-    margin-top: 15px;
-    font-size: 18px;
+.card{
+    background:#222;
+    border-radius:10px;
+    padding:15px;
+    margin:10px auto;
+    max-width:500px;
 }
 </style>
-</head>
 
+</head>
 <body>
 
-<div class="header">⚽ AI FOOTBALL PREDICTOR</div>
+<h1>⚽ โปรแกรมการแข่งขัน</h1>
 
-<div class="card">
-    <h3>Manchester United vs Liverpool</h3>
-    <button onclick="predict()">🤖 วิเคราะห์ AI</button>
-
-    <div class="result" id="result"></div>
-</div>
+<div id="matches">กำลังโหลด...</div>
 
 <script>
-function predict() {
-    let home = Math.floor(Math.random() * 40 + 30);
-    let draw = Math.floor(Math.random() * 20 + 10);
-    let away = 100 - home - draw;
 
-    document.getElementById("result").innerHTML =
-    "🏠 แมนยูชนะ: " + home + "%<br>" +
-    "🤝 เสมอ: " + draw + "%<br>" +
-    "🚀 ลิเวอร์พูลชนะ: " + away + "%<br><br>" +
-    "🎯 สกอร์คาดการณ์: 2 - 1";
-}
+const API_KEY = "cb29304b5d8f47ea9849eb589ae4b256;
+fetch("https://api.football-data.org/v4/competitions/PL/matches",{
+    headers:{
+        "X-Auth-Token":API_KEY
+    }
+})
+.then(res=>res.json())
+.then(data=>{
+
+    let html="";
+
+    data.matches.forEach(match=>{
+
+        html+=`
+        <div class="card">
+        <h3>${match.homeTeam.name}</h3>
+        <div>VS</div>
+        <h3>${match.awayTeam.name}</h3>
+        <p>${new Date(match.utcDate).toLocaleString()}</p>
+        </div>
+        `;
+
+    });
+
+    document.getElementById("matches").innerHTML=html;
+
+})
+.catch(()=>{
+    document.getElementById("matches").innerHTML="โหลดข้อมูลไม่สำเร็จ";
+});
+
 </script>
 
 </body>
