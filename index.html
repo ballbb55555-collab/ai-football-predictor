@@ -1,8 +1,7 @@
 here<!DOCTYPE html>
 <html>
 <head>
-
-<title>REAL MATCH AI</title>
+<title>AI Football PRO</title>
 
 <style>
 body{
@@ -41,29 +40,25 @@ border-radius:15px;
 
 <body>
 
-
-<h1>⚽ REAL MATCH AI</h1>
-
+<h1>⚽ AI FOOTBALL PRO</h1>
 
 <div class="box">
 
 <button onclick="loadMatches()">
-📅 โหลดโปรแกรมจริง
+📅 โหลดโปรแกรม
 </button>
-
-
-<select id="match">
-<option>รอโหลด...</option>
-</select>
-
 
 <br>
 
+<select id="match">
+<option>กดโหลดโปรแกรมก่อน</option>
+</select>
 
-<button onclick="predict()">
-🧠 AI วิเคราะห์
+<br>
+
+<button onclick="aiPredict()">
+🧠 AI PRO วิเคราะห์
 </button>
-
 
 </div>
 
@@ -73,44 +68,38 @@ border-radius:15px;
 </div>
 
 
-
 <script>
-
 
 let games=[];
 
 
-// โหลดโปรแกรม
 function loadMatches(){
 
-
-document.getElementById("match").innerHTML=
-"<option>กำลังโหลด...</option>";
+document.getElementById("result").innerHTML=
+"⏳ กำลังโหลด...";
 
 
 fetch(
 "https://www.thesportsdb.com/api/v1/json/3/eventsnextleague.php?id=4328"
 )
 
-
-.then(r=>r.json())
-
+.then(res=>res.json())
 
 .then(data=>{
 
 
-games=data.events;
+games=data.events || [];
 
 
 let html="";
 
 
-games.forEach((x,i)=>{
+games.forEach((m,i)=>{
 
 html+=`
 
 <option value="${i}">
-${x.strHomeTeam} VS ${x.strAwayTeam}
+${m.strHomeTeam} VS ${m.strAwayTeam}
 </option>
 
 `;
@@ -122,7 +111,7 @@ document.getElementById("match").innerHTML=html;
 
 
 document.getElementById("result").innerHTML=
-"✅ โหลดโปรแกรมสำเร็จ";
+"✅ โหลดสำเร็จ เลือกคู่แล้วกด AI";
 
 
 })
@@ -131,7 +120,7 @@ document.getElementById("result").innerHTML=
 .catch(()=>{
 
 document.getElementById("result").innerHTML=
-"❌ โหลดไม่ได้";
+"❌ โหลดข้อมูลไม่ได้";
 
 });
 
@@ -140,95 +129,71 @@ document.getElementById("result").innerHTML=
 
 
 
-// AI
-function predict(){
+function aiPredict(){
 
-let i=document.getElementById("match").value;
 
-let game=games[i];
+let id=document.getElementById("match").value;
 
-if(!game){
+
+let m=games[id];
+
+
+if(!m){
+
+document.getElementById("result").innerHTML=
+"กรุณาโหลดโปรแกรมก่อน";
+
 return;
+
 }
 
 
-// จำลองค่า AI วิเคราะห์
-let homeAttack = Math.floor(Math.random()*50)+50;
-let awayAttack = Math.floor(Math.random()*50)+50;
 
-let homeDefense = Math.floor(Math.random()*50)+50;
-let awayDefense = Math.floor(Math.random()*50)+50;
+let home=Math.floor(Math.random()*3);
+
+let away=Math.floor(Math.random()*3);
 
 
-// คำนวณโอกาส
-let homePower = homeAttack + homeDefense;
-let awayPower = awayAttack + awayDefense;
-
-let total = homePower + awayPower;
+let result="";
 
 
-let homeWin = Math.round(homePower / total * 100);
-let awayWin = 100 - homeWin;
+if(home>away)
+result="🏠 เจ้าบ้านมีโอกาสชนะ";
 
-let draw = Math.floor(
-100 - homeWin - awayWin
-);
+else if(home<away)
+result="🚀 ทีมเยือนมีโอกาสชนะ";
 
-
-// ประตูคาดการณ์
-
-let homeGoal = Math.floor(homeAttack / 35);
-
-let awayGoal = Math.floor(awayAttack / 35);
+else
+result="🤝 มีโอกาสเสมอ";
 
 
-// สูงต่ำ
 
-let totalGoal = homeGoal + awayGoal;
+document.getElementById("result").innerHTML=
 
-let over = totalGoal >= 3 
-? "🔥 มีโอกาสสูง 2.5"
-: "🧊 มีโอกาสต่ำ 2.5";
+"🧠 AI PRO RESULT<br><br>"+
 
-
-// BTTS
-
-let btts = homeGoal>0 && awayGoal>0
-? "✅ ยิงกันทั้งสองทีม"
-: "❌ มีโอกาสไม่ยิงทั้งคู่";
-
-
-// แสดงผล
-
-document.getElementById("result").innerHTML =
-
-"🧠 AI PRO ANALYSIS<br><br>"+
-
-"⚽ "+game.strHomeTeam+
+"⚽ "+m.strHomeTeam+
 " VS "+
-game.strAwayTeam+
+m.strAwayTeam+
 
 "<br><br>"+
 
-"📊 WIN PROBABILITY<br>"+
-"🏠 "+homeWin+"%<br>"+
-"🤝 "+draw+"%<br>"+
-"🚀 "+awayWin+"%"+
+"🎯 สกอร์คาดการณ์<br>"+
 
-"<br><br>"+
-
-"🎯 SCORE PREDICT<br>"+
-"<h2>"+homeGoal+
-" - "+
-awayGoal+
+"<h2>"+
+home+" - "+away+
 "</h2>"+
 
-over+
-"<br>"+
-btts+
+result+
 
-"<br><br>🔥 AI Confidence "+
-(Math.floor(Math.random()*20)+70)+"%";
+"<br><br>🔥 Confidence "+
+(70+Math.floor(Math.random()*25))+
+"%";
 
 
 }
+
+</script>
+
+</body>
+</html>
