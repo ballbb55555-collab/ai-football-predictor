@@ -1,71 +1,161 @@
-herefunction deepAI(){
+here<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI Football App</title>
 
-    let league = document.getElementById("league").value;
-
-    document.getElementById("deepAIBox").innerHTML =
-    "🧠 AI กำลังประมวลผลเชิงสถิติ...";
-
-    fetch(`https://www.thesportsdb.com/api/v1/json/3/eventsnextleague.php?id=${league}`)
-    .then(res => res.json())
-    .then(data => {
-
-        let m = data.events?.[0];
-
-        if(!m){
-            document.getElementById("deepAIBox").innerHTML = "ไม่มีข้อมูล";
-            return;
-        }
-
-        // 🧠 FEATURE ENGINEERING (จำลองสถิติจริง)
-        let homePower = (m.strHomeTeam.length * 7) % 100;
-        let awayPower = (m.strAwayTeam.length * 7) % 100;
-
-        let diff = Math.abs(homePower - awayPower);
-
-        // 🎯 Probability calculation
-        let homeWin = Math.round((homePower / (homePower + awayPower)) * 100);
-        let awayWin = 100 - homeWin;
-
-        let draw = Math.max(10, 100 - diff);
-
-        // normalize
-        let total = homeWin + awayWin + draw;
-
-        homeWin = Math.round((homeWin / total) * 100);
-        awayWin = Math.round((awayWin / total) * 100);
-        draw = 100 - homeWin - awayWin;
-
-        // ⚽ predicted score
-        let homeScore = Math.floor(homePower / 40);
-        let awayScore = Math.floor(awayPower / 40);
-
-        let verdict = "";
-
-        if(homeWin > awayWin + 15){
-            verdict = "🏠 ทีมเหย้าเหนือกว่า (High Confidence)";
-        } else if(awayWin > homeWin + 15){
-            verdict = "🚀 ทีมเยือนมีภาษีดีกว่า";
-        } else {
-            verdict = "🤝 สูสีมาก (Variance สูง → เสี่ยงเสมอ)";
-        }
-
-        document.getElementById("deepAIBox").innerHTML =
-        "🧠 DEEP AI ANALYSIS<br><br>" +
-
-        "⚽ " + m.strHomeTeam + " vs " + m.strAwayTeam + "<br><br>" +
-
-        "📊 Probability Model<br>" +
-        "🏠 ชนะ: " + homeWin + "%<br>" +
-        "🤝 เสมอ: " + draw + "%<br>" +
-        "🚀 เยือน: " + awayWin + "%<br><br>" +
-
-        "🎯 Score Prediction: " + homeScore + " - " + awayScore + "<br><br>" +
-
-        "🧠 Verdict: " + verdict;
-
-    })
-    .catch(err => {
-        document.getElementById("deepAIBox").innerHTML =
-        "❌ AI error: " + err.message;
-    });
+<style>
+body{
+background:#090909;
+color:white;
+font-family:Arial;
+text-align:center;
 }
+
+h1{
+color:gold;
+}
+
+button{
+padding:12px;
+margin:5px;
+border:0;
+border-radius:8px;
+background:gold;
+font-weight:bold;
+}
+
+.card{
+background:#171717;
+margin:10px;
+padding:15px;
+border-radius:12px;
+}
+
+.gold{
+color:gold;
+}
+</style>
+
+</head>
+
+<body>
+
+<h1>⚽ AI FOOTBALL APP</h1>
+
+<button onclick="matches()">📅 โปรแกรม</button>
+<button onclick="ai()">🧠 AI ทายสกอร์</button>
+
+<div id="box">
+กดปุ่มเริ่ม
+</div>
+
+
+<script>
+
+const API =
+"https://www.thesportsdb.com/api/v1/json/3";
+
+
+function matches(){
+
+document.getElementById("box").innerHTML="กำลังโหลด...";
+
+fetch(API+"/eventsnextleague.php?id=4328")
+
+.then(r=>r.json())
+
+.then(data=>{
+
+let html="";
+
+if(!data.events){
+html="ไม่มีข้อมูล";
+}
+
+else{
+
+data.events.slice(0,10).forEach(x=>{
+
+html+=`
+
+<div class="card">
+
+<b>${x.strHomeTeam}</b>
+
+<br>
+VS
+<br>
+
+<b>${x.strAwayTeam}</b>
+
+<br>
+
+<small>
+${x.dateEvent}
+</small>
+
+</div>
+
+`;
+
+});
+
+}
+
+document.getElementById("box").innerHTML=html;
+
+})
+
+.catch(e=>{
+
+document.getElementById("box").innerHTML=
+"API โหลดไม่ได้";
+
+});
+
+}
+
+
+
+function ai(){
+
+let home=
+Math.floor(Math.random()*3);
+
+let away=
+Math.floor(Math.random()*3);
+
+
+document.getElementById("box").innerHTML=
+
+`
+
+<div class="card">
+
+<h2 class="gold">
+🧠 AI Prediction
+</h2>
+
+สกอร์คาดการณ์
+
+<h1>
+${home} - ${away}
+</h1>
+
+ความมั่นใจประมาณ
+
+${60+Math.floor(Math.random()*30)}%
+
+</div>
+
+`;
+
+}
+
+</script>
+
+
+</body>
+</html>
