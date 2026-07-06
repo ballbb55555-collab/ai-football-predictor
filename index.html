@@ -1,7 +1,8 @@
 here<!DOCTYPE html>
 <html>
 <head>
-<title>AI Football Predictor PRO</title>
+
+<title>REAL MATCH AI</title>
 
 <style>
 body{
@@ -15,7 +16,7 @@ h1{
 color:gold;
 }
 
-select,button{
+button,select{
 padding:12px;
 margin:5px;
 border-radius:10px;
@@ -30,98 +31,190 @@ background:gold;
 .box{
 background:#222;
 margin:15px;
-padding:20px;
+padding:15px;
 border-radius:15px;
 }
+
 </style>
 
 </head>
 
 <body>
 
-<h1>⚽ AI FOOTBALL PREDICTOR PRO</h1>
+
+<h1>⚽ REAL MATCH AI</h1>
+
 
 <div class="box">
 
-<select id="home">
-<option>Manchester United</option>
-<option>Liverpool</option>
-<option>Arsenal</option>
-<option>Manchester City</option>
-<option>Chelsea</option>
+<button onclick="loadMatches()">
+📅 โหลดโปรแกรมจริง
+</button>
+
+
+<select id="match">
+<option>รอโหลด...</option>
 </select>
+
 
 <br>
 
-VS
-
-<br>
-
-<select id="away">
-<option>Liverpool</option>
-<option>Manchester United</option>
-<option>Real Madrid</option>
-<option>Barcelona</option>
-<option>Bayern Munich</option>
-</select>
-
-<br><br>
 
 <button onclick="predict()">
 🧠 AI วิเคราะห์
 </button>
 
-<p id="result">
-รอวิเคราะห์...
-</p>
 
 </div>
 
 
+<div class="box" id="result">
+รอข้อมูล...
+</div>
+
+
+
 <script>
 
+
+let games=[];
+
+
+// โหลดโปรแกรม
+function loadMatches(){
+
+
+document.getElementById("match").innerHTML=
+"<option>กำลังโหลด...</option>";
+
+
+fetch(
+"https://www.thesportsdb.com/api/v1/json/3/eventsnextleague.php?id=4328"
+)
+
+
+.then(r=>r.json())
+
+
+.then(data=>{
+
+
+games=data.events;
+
+
+let html="";
+
+
+games.forEach((x,i)=>{
+
+html+=`
+
+<option value="${i}">
+${x.strHomeTeam} VS ${x.strAwayTeam}
+</option>
+
+`;
+
+});
+
+
+document.getElementById("match").innerHTML=html;
+
+
+document.getElementById("result").innerHTML=
+"✅ โหลดโปรแกรมสำเร็จ";
+
+
+})
+
+
+.catch(()=>{
+
+document.getElementById("result").innerHTML=
+"❌ โหลดไม่ได้";
+
+});
+
+
+}
+
+
+
+// AI
 function predict(){
 
-let home =
-document.getElementById("home").value;
 
-let away =
-document.getElementById("away").value;
+let i=document.getElementById("match").value;
 
 
-let h =
+let game=games[i];
+
+
+if(!game){
+
+return;
+
+}
+
+
+
+let home=
 Math.floor(Math.random()*4);
 
-let a =
+
+let away=
 Math.floor(Math.random()*4);
 
 
-let win="";
 
-if(h>a){
-win="🏠 ทีมเหย้ามีโอกาสชนะ";
+let text="";
+
+
+if(home>away){
+
+text="🏠 ทีมเหย้ามีโอกาสชนะ";
+
 }
-else if(h<a){
-win="🚀 ทีมเยือนมีโอกาสชนะ";
+
+else if(home<away){
+
+text="🚀 ทีมเยือนมีโอกาสชนะ";
+
 }
+
 else{
-win="🤝 มีโอกาสเสมอ";
+
+text="🤝 มีโอกาสเสมอ";
+
 }
+
 
 
 document.getElementById("result").innerHTML=
 
-"⚽ "+home+" VS "+away+
+"⚽ "+game.strHomeTeam+
+" VS "+
+game.strAwayTeam+
+
 "<br><br>"+
+
 "🎯 สกอร์คาดการณ์<br>"+
-"<h2>"+h+" - "+a+"</h2>"+
-win+
-"<br><br>🔥 ความมั่นใจ "+
-(60+Math.floor(Math.random()*30))+"%";
+
+"<h2>"+home+" - "+away+"</h2>"+
+
+text+
+
+"<br><br>🔥 Confidence "+
+(60+Math.floor(Math.random()*30))+
+"%";
+
 
 }
 
+
+
 </script>
+
 
 </body>
 </html>
