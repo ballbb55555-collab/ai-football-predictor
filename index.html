@@ -143,54 +143,66 @@ document.getElementById("result").innerHTML=
 // AI
 function predict(){
 
-
 let i=document.getElementById("match").value;
-
 
 let game=games[i];
 
-
 if(!game){
-
 return;
-
 }
 
 
+// จำลองค่า AI วิเคราะห์
+let homeAttack = Math.floor(Math.random()*50)+50;
+let awayAttack = Math.floor(Math.random()*50)+50;
 
-let home=
-Math.floor(Math.random()*4);
-
-
-let away=
-Math.floor(Math.random()*4);
-
+let homeDefense = Math.floor(Math.random()*50)+50;
+let awayDefense = Math.floor(Math.random()*50)+50;
 
 
-let text="";
+// คำนวณโอกาส
+let homePower = homeAttack + homeDefense;
+let awayPower = awayAttack + awayDefense;
+
+let total = homePower + awayPower;
 
 
-if(home>away){
+let homeWin = Math.round(homePower / total * 100);
+let awayWin = 100 - homeWin;
 
-text="🏠 ทีมเหย้ามีโอกาสชนะ";
-
-}
-
-else if(home<away){
-
-text="🚀 ทีมเยือนมีโอกาสชนะ";
-
-}
-
-else{
-
-text="🤝 มีโอกาสเสมอ";
-
-}
+let draw = Math.floor(
+100 - homeWin - awayWin
+);
 
 
+// ประตูคาดการณ์
 
-document.getElementById("result").innerHTML=
+let homeGoal = Math.floor(homeAttack / 35);
+
+let awayGoal = Math.floor(awayAttack / 35);
+
+
+// สูงต่ำ
+
+let totalGoal = homeGoal + awayGoal;
+
+let over = totalGoal >= 3 
+? "🔥 มีโอกาสสูง 2.5"
+: "🧊 มีโอกาสต่ำ 2.5";
+
+
+// BTTS
+
+let btts = homeGoal>0 && awayGoal>0
+? "✅ ยิงกันทั้งสองทีม"
+: "❌ มีโอกาสไม่ยิงทั้งคู่";
+
+
+// แสดงผล
+
+document.getElementById("result").innerHTML =
+
+"🧠 AI PRO ANALYSIS<br><br>"+
 
 "⚽ "+game.strHomeTeam+
 " VS "+
@@ -198,23 +210,25 @@ game.strAwayTeam+
 
 "<br><br>"+
 
-"🎯 สกอร์คาดการณ์<br>"+
+"📊 WIN PROBABILITY<br>"+
+"🏠 "+homeWin+"%<br>"+
+"🤝 "+draw+"%<br>"+
+"🚀 "+awayWin+"%"+
 
-"<h2>"+home+" - "+away+"</h2>"+
+"<br><br>"+
 
-text+
+"🎯 SCORE PREDICT<br>"+
+"<h2>"+homeGoal+
+" - "+
+awayGoal+
+"</h2>"+
 
-"<br><br>🔥 Confidence "+
-(60+Math.floor(Math.random()*30))+
-"%";
+over+
+"<br>"+
+btts+
+
+"<br><br>🔥 AI Confidence "+
+(Math.floor(Math.random()*20)+70)+"%";
 
 
 }
-
-
-
-</script>
-
-
-</body>
-</html>
