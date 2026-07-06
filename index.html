@@ -2,125 +2,172 @@ here<!DOCTYPE html>
 <html>
 <head>
 
-<title>LIVE MATCH MODE</title>
+<title>FINAL AI FOOTBALL APP</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
 
 body{
-background:#111;
+margin:0;
+background:#080808;
 color:white;
 font-family:Arial;
 text-align:center;
 }
 
-h1{
+.header{
+padding:20px;
+font-size:25px;
+font-weight:bold;
 color:gold;
+}
+
+.card{
+background:#171717;
+margin:15px;
+padding:15px;
+border-radius:15px;
+box-shadow:0 0 10px #333;
 }
 
 button,select{
 padding:12px;
 margin:5px;
-border-radius:10px;
 border:0;
+border-radius:10px;
 font-weight:bold;
 }
 
 button{
 background:gold;
+color:black;
 }
 
-.box{
-background:#222;
-margin:10px;
-padding:15px;
-border-radius:15px;
+select{
+width:90%;
 }
 
-.match{
-background:#333;
-margin:8px;
-padding:10px;
-border-radius:10px;
+
+.team{
+font-size:18px;
+font-weight:bold;
 }
+
+
+.score{
+font-size:35px;
+color:gold;
+}
+
+
+.green{
+color:#00ff66;
+}
+
+
+.red{
+color:#ff4444;
+}
+
 
 </style>
 
 </head>
 
+
 <body>
 
 
-<h1>⚽ LIVE MATCH AI</h1>
+<div class="header">
+⚽ FINAL AI FOOTBALL APP
+</div>
 
 
-<div class="box">
 
-<button onclick="loadLive()">
-🔥 โหลดหลายคู่
+<div class="card">
+
+<button onclick="loadMatches()">
+🔄 โหลดโปรแกรมบอล
 </button>
 
 
+<br>
+
+
 <select id="match">
-<option>รอโหลด...</option>
+
+<option>
+รอโหลดข้อมูล
+</option>
+
 </select>
 
 
 <br>
 
 
-<button onclick="ai()">
-🧠 AI วิเคราะห์
+<button onclick="analysis()">
+🧠 AI ANALYSIS
 </button>
 
-</div>
 
-
-<div class="box" id="list">
-รอข้อมูล...
-</div>
-
-
-<div class="box" id="result">
-AI รอทำงาน
 </div>
 
 
 
+<div class="card" id="matches">
+
+กำลังรอข้อมูล...
+
+</div>
+
+
+
+<div class="card" id="result">
+
+AI พร้อมวิเคราะห์
+
+</div>
 <script>
 
-
-let matches=[];
-
-
-// โหลดหลายคู่
-
-function loadLive(){
+let games=[];
 
 
-document.getElementById("list").innerHTML=
+// โหลดโปรแกรม
+
+function loadMatches(){
+
+
+document.getElementById("matches").innerHTML=
 "⏳ กำลังโหลด...";
 
 
+let today =
+new Date().toISOString().slice(0,10);
+
+
+
 fetch(
+`https://www.thesportsdb.com/api/v1/json/3/eventsday.php?d=${today}&s=Soccer`
+)
 
-`https://www.thesportsdb.com/api/v1/json/3/eventsday.php?d=${new Date().toISOString().slice(0,10)}&s=Soccer`
 
-.then(r=>r.json())
+.then(res=>res.json())
 
 
 .then(data=>{
 
 
-matches=data.events || [];
+games=data.events || [];
 
 
 let option="";
+let list="";
 
 
-let html="";
 
-
-matches.forEach((m,i)=>{
+games.forEach((m,i)=>{
 
 
 option+=`
@@ -132,36 +179,54 @@ ${m.strHomeTeam} VS ${m.strAwayTeam}
 `;
 
 
-html+=`
 
-<div class="match">
+list+=`
 
-⚽ ${m.strHomeTeam}
+<div class="card">
 
+<div class="team">
+${m.strHomeTeam}
 <br>
-
 VS
-
 <br>
+${m.strAwayTeam}
+</div>
 
-⚽ ${m.strAwayTeam}
 
-<br>
+<div class="score">
 
-📅 ${m.dateEvent}
+${m.intHomeScore ?? "-"}
+ -
+${m.intAwayScore ?? "-"}
+
+</div>
+
+
+<div class="green">
+
+${m.strStatus || "Scheduled"}
+
+</div>
+
 
 </div>
 
 `;
 
+
+
 });
 
 
-document.getElementById("match").innerHTML=option;
+
+document.getElementById("match").innerHTML =
+option || "<option>ไม่มีคู่แข่ง</option>";
 
 
-document.getElementById("list").innerHTML=
-html || "ไม่มีโปรแกรม";
+
+document.getElementById("matches").innerHTML =
+list || "วันนี้ไม่มีข้อมูล";
+
 
 
 })
@@ -169,8 +234,10 @@ html || "ไม่มีโปรแกรม";
 
 .catch(()=>{
 
-document.getElementById("list").innerHTML=
-"❌ โหลดไม่ได้";
+
+document.getElementById("matches").innerHTML=
+"❌ โหลดข้อมูลไม่ได้";
+
 
 });
 
@@ -179,23 +246,71 @@ document.getElementById("list").innerHTML=
 
 
 
-// AI
+// AI วิเคราะห์
 
-function ai(){
-
-
-let id=document.getElementById("match").value;
+function analysis(){
 
 
-let m=matches[id];
+let id=
+document.getElementById("match").value;
 
 
-if(!m)return;
+let game=
+games[id];
 
 
-let home=Math.floor(Math.random()*4);
 
-let away=Math.floor(Math.random()*4);
+if(!game){
+
+
+document.getElementById("result").innerHTML=
+"กรุณาโหลดโปรแกรมก่อน";
+
+
+return;
+
+}
+
+
+
+let home =
+Math.floor(Math.random()*4);
+
+
+let away =
+Math.floor(Math.random()*4);
+
+
+
+let winHome =
+Math.floor(Math.random()*30)+50;
+
+
+let winAway =
+Math.floor(Math.random()*25)+20;
+
+
+let draw =
+100-winHome-winAway;
+
+
+
+let over =
+(home+away)>=3
+?
+"🔥 สูง 2.5 มีโอกาส"
+:
+"🧊 ต่ำ 2.5 มีโอกาส";
+
+
+
+let btts =
+(home>0 && away>0)
+?
+"✅ ยิงกันทั้งสองทีม"
+:
+"❌ BTTS ต่ำ";
+
 
 
 let result="";
@@ -205,33 +320,57 @@ if(home>away)
 result="🏠 เจ้าบ้านได้เปรียบ";
 
 else if(home<away)
-result="🚀 ทีมเยือนเหนือกว่า";
+result="🚀 ทีมเยือนได้เปรียบ";
 
 else
-result="🤝 สูสี";
+result="🤝 มีโอกาสเสมอ";
+
 
 
 
 document.getElementById("result").innerHTML=
 
-"🧠 LIVE AI RESULT<br><br>"+
 
-m.strHomeTeam+
+"🧠 FINAL AI RESULT<br><br>"+
+
+
+game.strHomeTeam+
 " VS "+
-m.strAwayTeam+
+game.strAwayTeam+
 
 "<br><br>"+
 
-"🎯 SCORE<br>"+
 
-"<h2>"+
-home+" - "+away+
-"</h2>"+
+"📊 WIN PROBABILITY<br>"+
+"🏠 "+winHome+"%<br>"+
+"🤝 "+draw+"%<br>"+
+"🚀 "+winAway+"%"+
+
+
+"<br><br>"+
+
+
+"🎯 SCORE PREDICT"+
+
+"<div class='score'>"+
+home+
+" - "+
+away+
+"</div>"+
+
 
 result+
 
-"<br><br>🔥 Confidence "+
-(70+Math.floor(Math.random()*25))+
+"<br><br>"+
+
+over+
+"<br>"+
+btts+
+
+"<br><br>"+
+
+"🔥 AI CONFIDENCE "+
+(Math.floor(Math.random()*20)+75)+
 "%";
 
 
