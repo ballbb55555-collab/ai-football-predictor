@@ -1,9 +1,11 @@
 here<!DOCTYPE html>
 <html>
 <head>
-<title>AI Football PRO</title>
+
+<title>LIVE MATCH MODE</title>
 
 <style>
+
 body{
 background:#111;
 color:white;
@@ -29,9 +31,16 @@ background:gold;
 
 .box{
 background:#222;
-margin:15px;
+margin:10px;
 padding:15px;
 border-radius:15px;
+}
+
+.match{
+background:#333;
+margin:8px;
+padding:10px;
+border-radius:10px;
 }
 
 </style>
@@ -40,42 +49,55 @@ border-radius:15px;
 
 <body>
 
-<h1>⚽ AI FOOTBALL PRO</h1>
+
+<h1>⚽ LIVE MATCH AI</h1>
+
 
 <div class="box">
 
-<button onclick="loadMatches()">
-📅 โหลดโปรแกรม
+<button onclick="loadLive()">
+🔥 โหลดหลายคู่
 </button>
 
-<br>
 
 <select id="match">
-<option>กดโหลดโปรแกรมก่อน</option>
+<option>รอโหลด...</option>
 </select>
+
 
 <br>
 
-<button onclick="aiPredict()">
-🧠 AI PRO วิเคราะห์
+
+<button onclick="ai()">
+🧠 AI วิเคราะห์
 </button>
 
 </div>
 
 
-<div class="box" id="result">
+<div class="box" id="list">
 รอข้อมูล...
 </div>
 
 
+<div class="box" id="result">
+AI รอทำงาน
+</div>
+
+
+
 <script>
 
-let games=[];
+
+let matches=[];
 
 
-function loadMatches(){
+// โหลดหลายคู่
 
-document.getElementById("result").innerHTML=
+function loadLive(){
+
+
+document.getElementById("list").innerHTML=
 "⏳ กำลังโหลด...";
 
 
@@ -83,20 +105,26 @@ fetch(
 "https://www.thesportsdb.com/api/v1/json/3/eventsnextleague.php?id=4328"
 )
 
-.then(res=>res.json())
+
+.then(r=>r.json())
+
 
 .then(data=>{
 
 
-games=data.events || [];
+matches=data.events || [];
+
+
+let option="";
 
 
 let html="";
 
 
-games.forEach((m,i)=>{
+matches.forEach((m,i)=>{
 
-html+=`
+
+option+=`
 
 <option value="${i}">
 ${m.strHomeTeam} VS ${m.strAwayTeam}
@@ -104,14 +132,37 @@ ${m.strHomeTeam} VS ${m.strAwayTeam}
 
 `;
 
+
+html+=`
+
+<div class="match">
+
+⚽ ${m.strHomeTeam}
+
+<br>
+
+VS
+
+<br>
+
+⚽ ${m.strAwayTeam}
+
+<br>
+
+📅 ${m.dateEvent}
+
+</div>
+
+`;
+
 });
 
 
-document.getElementById("match").innerHTML=html;
+document.getElementById("match").innerHTML=option;
 
 
-document.getElementById("result").innerHTML=
-"✅ โหลดสำเร็จ เลือกคู่แล้วกด AI";
+document.getElementById("list").innerHTML=
+html || "ไม่มีโปรแกรม";
 
 
 })
@@ -119,8 +170,8 @@ document.getElementById("result").innerHTML=
 
 .catch(()=>{
 
-document.getElementById("result").innerHTML=
-"❌ โหลดข้อมูลไม่ได้";
+document.getElementById("list").innerHTML=
+"❌ โหลดไม่ได้";
 
 });
 
@@ -129,56 +180,50 @@ document.getElementById("result").innerHTML=
 
 
 
-function aiPredict(){
+// AI
+
+function ai(){
 
 
 let id=document.getElementById("match").value;
 
 
-let m=games[id];
+let m=matches[id];
 
 
-if(!m){
-
-document.getElementById("result").innerHTML=
-"กรุณาโหลดโปรแกรมก่อน";
-
-return;
-
-}
+if(!m)return;
 
 
+let home=Math.floor(Math.random()*4);
 
-let home=Math.floor(Math.random()*3);
-
-let away=Math.floor(Math.random()*3);
+let away=Math.floor(Math.random()*4);
 
 
 let result="";
 
 
 if(home>away)
-result="🏠 เจ้าบ้านมีโอกาสชนะ";
+result="🏠 เจ้าบ้านได้เปรียบ";
 
 else if(home<away)
-result="🚀 ทีมเยือนมีโอกาสชนะ";
+result="🚀 ทีมเยือนเหนือกว่า";
 
 else
-result="🤝 มีโอกาสเสมอ";
+result="🤝 สูสี";
 
 
 
 document.getElementById("result").innerHTML=
 
-"🧠 AI PRO RESULT<br><br>"+
+"🧠 LIVE AI RESULT<br><br>"+
 
-"⚽ "+m.strHomeTeam+
+m.strHomeTeam+
 " VS "+
 m.strAwayTeam+
 
 "<br><br>"+
 
-"🎯 สกอร์คาดการณ์<br>"+
+"🎯 SCORE<br>"+
 
 "<h2>"+
 home+" - "+away+
@@ -193,7 +238,9 @@ result+
 
 }
 
+
 </script>
+
 
 </body>
 </html>
