@@ -93,7 +93,17 @@ color:#ff4444;
 
 
 <br>
-
+<select id="league">
+<option value="all">🌍 ทุกลีก</option>
+<option value="4328">🇬🇧 พรีเมียร์ลีก</option>
+<option value="4335">🇪🇸 ลาลีกา</option>
+<option value="4331">🇩🇪 บุนเดสลีกา</option>
+<option value="4332">🇮🇹 กัลโช่ เซเรีย อา</option>
+<option value="4334">🇫🇷 ลีกเอิง</option>
+<option value="4330">🇳🇱 เอเรดิวิซี</option>
+<option value="4337">🇵🇹 โปรตุเกส</option>
+<option value="4346">🇺🇸 MLS</option>
+</select>
 
 <select id="match">
 
@@ -145,14 +155,12 @@ document.getElementById("matches").innerHTML=
 
 let today =
 new Date().toISOString().slice(0,10);
-
-
+let league =
+document.getElementById("league").value;
 
 fetch(
-`https://www.thesportsdb.com/api/v1/json/3/eventsday.php?d=${today}&s=Soccer`
+`https://www.thesportsdb.com/api/v1/json/3/eventsnextleague.php?id=${league}`
 )
-
-
 .then(res=>res.json())
 
 
