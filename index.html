@@ -15,18 +15,22 @@ h1{
 color:gold;
 }
 
-button{
-padding:12px 20px;
-background:gold;
-border:0;
+select,button{
+padding:12px;
+margin:5px;
 border-radius:10px;
+border:0;
 font-weight:bold;
 }
 
+button{
+background:gold;
+}
+
 .box{
-margin:20px;
-padding:20px;
 background:#222;
+margin:15px;
+padding:20px;
 border-radius:15px;
 }
 </style>
@@ -35,13 +39,36 @@ border-radius:15px;
 
 <body>
 
-<h1>⚽ AI Football Predictor PRO</h1>
+<h1>⚽ AI FOOTBALL PREDICTOR PRO</h1>
 
 <div class="box">
-<h3>Manchester United VS Liverpool</h3>
+
+<select id="home">
+<option>Manchester United</option>
+<option>Liverpool</option>
+<option>Arsenal</option>
+<option>Manchester City</option>
+<option>Chelsea</option>
+</select>
+
+<br>
+
+VS
+
+<br>
+
+<select id="away">
+<option>Liverpool</option>
+<option>Manchester United</option>
+<option>Real Madrid</option>
+<option>Barcelona</option>
+<option>Bayern Munich</option>
+</select>
+
+<br><br>
 
 <button onclick="predict()">
-🧠 AI ทายสกอร์
+🧠 AI วิเคราะห์
 </button>
 
 <p id="result">
@@ -55,13 +82,41 @@ border-radius:15px;
 
 function predict(){
 
-let home=Math.floor(Math.random()*4);
-let away=Math.floor(Math.random()*4);
+let home =
+document.getElementById("home").value;
+
+let away =
+document.getElementById("away").value;
+
+
+let h =
+Math.floor(Math.random()*4);
+
+let a =
+Math.floor(Math.random()*4);
+
+
+let win="";
+
+if(h>a){
+win="🏠 ทีมเหย้ามีโอกาสชนะ";
+}
+else if(h<a){
+win="🚀 ทีมเยือนมีโอกาสชนะ";
+}
+else{
+win="🤝 มีโอกาสเสมอ";
+}
+
 
 document.getElementById("result").innerHTML=
-"🎯 สกอร์คาดการณ์<br><br>"+
-home+" - "+away+
-"<br><br>🤖 AI Confidence "+
+
+"⚽ "+home+" VS "+away+
+"<br><br>"+
+"🎯 สกอร์คาดการณ์<br>"+
+"<h2>"+h+" - "+a+"</h2>"+
+win+
+"<br><br>🔥 ความมั่นใจ "+
 (60+Math.floor(Math.random()*30))+"%";
 
 }
