@@ -1,10 +1,72 @@
-<!DOCTYPE html>
+here<!DOCTYPE html>
 <html>
 <head>
-<title>AI Football</title>
+<title>AI Football Predictor PRO</title>
+
+<style>
+body{
+background:#111;
+color:white;
+font-family:Arial;
+text-align:center;
+}
+
+h1{
+color:gold;
+}
+
+button{
+padding:12px 20px;
+background:gold;
+border:0;
+border-radius:10px;
+font-weight:bold;
+}
+
+.box{
+margin:20px;
+padding:20px;
+background:#222;
+border-radius:15px;
+}
+</style>
+
 </head>
+
 <body>
+
 <h1>⚽ AI Football Predictor PRO</h1>
-<p>Deploy สำเร็จ AI V2</p>
+
+<div class="box">
+<h3>Manchester United VS Liverpool</h3>
+
+<button onclick="predict()">
+🧠 AI ทายสกอร์
+</button>
+
+<p id="result">
+รอวิเคราะห์...
+</p>
+
+</div>
+
+
+<script>
+
+function predict(){
+
+let home=Math.floor(Math.random()*4);
+let away=Math.floor(Math.random()*4);
+
+document.getElementById("result").innerHTML=
+"🎯 สกอร์คาดการณ์<br><br>"+
+home+" - "+away+
+"<br><br>🤖 AI Confidence "+
+(60+Math.floor(Math.random()*30))+"%";
+
+}
+
+</script>
+
 </body>
 </html>
