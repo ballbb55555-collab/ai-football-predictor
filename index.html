@@ -1,30 +1,71 @@
-hereconst API_KEY = "cb29304b5d8f47ea9849eb589ae4b256";
+herefunction deepAI(){
 
-fetch("https://api.football-data.org/v4/matches", {
-    headers: {
-        "X-Auth-Token": API_KEY
-    }
-})
-.then(res => {
-    if (!res.ok) throw new Error("API Error: " + res.status);
-    return res.json();
-})
-.then(data => {
-    let html = "";
+    let league = document.getElementById("league").value;
 
-    data.matches.forEach(match => {
-        html += `
-        <div class="card">
-            <h3>${match.homeTeam.name}</h3>
-            <div>VS</div>
-            <h3>${match.awayTeam.name}</h3>
-            <p>${new Date(match.utcDate).toLocaleString()}</p>
-        </div>`;
+    document.getElementById("deepAIBox").innerHTML =
+    "🧠 AI กำลังประมวลผลเชิงสถิติ...";
+
+    fetch(`https://www.thesportsdb.com/api/v1/json/3/eventsnextleague.php?id=${league}`)
+    .then(res => res.json())
+    .then(data => {
+
+        let m = data.events?.[0];
+
+        if(!m){
+            document.getElementById("deepAIBox").innerHTML = "ไม่มีข้อมูล";
+            return;
+        }
+
+        // 🧠 FEATURE ENGINEERING (จำลองสถิติจริง)
+        let homePower = (m.strHomeTeam.length * 7) % 100;
+        let awayPower = (m.strAwayTeam.length * 7) % 100;
+
+        let diff = Math.abs(homePower - awayPower);
+
+        // 🎯 Probability calculation
+        let homeWin = Math.round((homePower / (homePower + awayPower)) * 100);
+        let awayWin = 100 - homeWin;
+
+        let draw = Math.max(10, 100 - diff);
+
+        // normalize
+        let total = homeWin + awayWin + draw;
+
+        homeWin = Math.round((homeWin / total) * 100);
+        awayWin = Math.round((awayWin / total) * 100);
+        draw = 100 - homeWin - awayWin;
+
+        // ⚽ predicted score
+        let homeScore = Math.floor(homePower / 40);
+        let awayScore = Math.floor(awayPower / 40);
+
+        let verdict = "";
+
+        if(homeWin > awayWin + 15){
+            verdict = "🏠 ทีมเหย้าเหนือกว่า (High Confidence)";
+        } else if(awayWin > homeWin + 15){
+            verdict = "🚀 ทีมเยือนมีภาษีดีกว่า";
+        } else {
+            verdict = "🤝 สูสีมาก (Variance สูง → เสี่ยงเสมอ)";
+        }
+
+        document.getElementById("deepAIBox").innerHTML =
+        "🧠 DEEP AI ANALYSIS<br><br>" +
+
+        "⚽ " + m.strHomeTeam + " vs " + m.strAwayTeam + "<br><br>" +
+
+        "📊 Probability Model<br>" +
+        "🏠 ชนะ: " + homeWin + "%<br>" +
+        "🤝 เสมอ: " + draw + "%<br>" +
+        "🚀 เยือน: " + awayWin + "%<br><br>" +
+
+        "🎯 Score Prediction: " + homeScore + " - " + awayScore + "<br><br>" +
+
+        "🧠 Verdict: " + verdict;
+
+    })
+    .catch(err => {
+        document.getElementById("deepAIBox").innerHTML =
+        "❌ AI error: " + err.message;
     });
-
-    document.getElementById("matches").innerHTML = html;
-})
-.catch(err => {
-    document.getElementById("matches").innerHTML =
-    "❌ โหลดไม่ได้: " + err.message;
-});
+}
