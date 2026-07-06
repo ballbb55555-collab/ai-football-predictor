@@ -1,68 +1,30 @@
-here<!DOCTYPE html>
-<html lang="th">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Football Fixtures</title>
+hereconst API_KEY = "YOUR_API_KEY";
 
-<style>
-body{
-    background:#111;
-    color:#fff;
-    font-family:Arial,sans-serif;
-    text-align:center;
-    padding:20px;
-}
-.card{
-    background:#222;
-    border-radius:10px;
-    padding:15px;
-    margin:10px auto;
-    max-width:500px;
-}
-</style>
-
-</head>
-<body>
-
-<h1>⚽ โปรแกรมการแข่งขัน</h1>
-
-<div id="matches">กำลังโหลด...</div>
-
-<script>
-
-const API_KEY = " cb29304b5d8f47ea9849eb589ae4b256 ;
-fetch("https://api.football-data.org/v4/competitions/PL/matches",{
-    headers:{
-        "X-Auth-Token":API_KEY
+fetch("https://api.football-data.org/v4/matches", {
+    headers: {
+        "X-Auth-Token": API_KEY
     }
 })
-.then(res=>res.json())
-.then(data=>{
+.then(res => {
+    if (!res.ok) throw new Error("API Error: " + res.status);
+    return res.json();
+})
+.then(data => {
+    let html = "";
 
-    let html="";
-
-    data.matches.forEach(match=>{
-
-        html+=`
+    data.matches.forEach(match => {
+        html += `
         <div class="card">
-        <h3>${match.homeTeam.name}</h3>
-        <div>VS</div>
-        <h3>${match.awayTeam.name}</h3>
-        <p>${new Date(match.utcDate).toLocaleString()}</p>
-        </div>
-        `;
-
+            <h3>${match.homeTeam.name}</h3>
+            <div>VS</div>
+            <h3>${match.awayTeam.name}</h3>
+            <p>${new Date(match.utcDate).toLocaleString()}</p>
+        </div>`;
     });
 
-    document.getElementById("matches").innerHTML=html;
-
+    document.getElementById("matches").innerHTML = html;
 })
-.catch(()=>{
-    document.getElementById("matches").innerHTML="โหลดข้อมูลไม่สำเร็จ";
+.catch(err => {
+    document.getElementById("matches").innerHTML =
+    "❌ โหลดไม่ได้: " + err.message;
 });
-
-</script>
-
-</body>
-</html>
