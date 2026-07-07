@@ -174,3 +174,36 @@ YES : 59%
 
 </body>
 </html>
+<script src="app.js"></script>
+
+<script>
+
+let match = JSON.parse(localStorage.getItem("matchData"));
+
+
+if(match){
+
+document.querySelector(".name").innerHTML = match.home;
+
+document.querySelectorAll(".name")[1].innerHTML = match.away;
+
+
+document.querySelectorAll(".team img")[0].src = match.logo1;
+
+document.querySelectorAll(".team img")[1].src = match.logo2;
+
+
+document.querySelector(".box:nth-of-type(2)").innerHTML =
+"💰 ราคาบอล<br>"+match.odds;
+
+
+document.querySelector(".box:nth-of-type(3)").innerHTML =
+"⚽ สูงต่ำ<br>"+match.ou;
+
+
+document.querySelector(".box:nth-of-type(4)").innerHTML =
+"🔥 BTTS<br>"+match.btts;
+
+}
+
+</script>
