@@ -3,10 +3,23 @@
 }
 
 html,body{
-    width:100%;
-    min-height:100%;
+    *{
     margin:0;
     padding:0;
+    box-sizing:border-box;
+}
+
+html, body{
+    width:100%;
+    min-height:100%;
+}
+
+body{
+    background:#070707;
+    color:white;
+    font-family:Arial, sans-serif;
+    overflow-x:hidden;
+}
 }
 
 body{
@@ -30,22 +43,22 @@ header{
 
 .card{
     background:#171717;
-    .card{
-    width:calc(100% - 20px);
+   .card{
+    width:95%;
     margin:10px auto;
-    }
     padding:15px;
     border-radius:15px;
-    box-shadow:0 0 15px #000;
 }
 
+
 .team{
+    width:100%;
     display:flex;
-    justify-content:center;
+    justify-content:space-around;
     align-items:center;
-    gap:30px;
-    text-align:center;
 }
+    
+
 
 .team img{
     width:70px;
