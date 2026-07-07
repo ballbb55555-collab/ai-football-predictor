@@ -31,14 +31,25 @@ id="searchLeague"
 placeholder="ค้นหาลีก เช่น Premier League">
 
 
-<input 
-id="home"
-placeholder="ทีมเหย้า">
+<select id="league" onchange="loadTeams()">
+<option value="">เลือกลีก</option>
+<option value="39">พรีเมียร์ลีก อังกฤษ</option>
+<option value="140">ลาลีกา สเปน</option>
+<option value="135">กัลโช่ อิตาลี</option>
+<option value="78">บุนเดสลีกา เยอรมัน</option>
+<option value="61">ลีกเอิง ฝรั่งเศส</option>
+<option value="292">ไทยลีก</option>
+</select>
 
 
-<input 
-id="away"
-placeholder="ทีมเยือน">
+<select id="home">
+<option>เลือกทีมเหย้า</option>
+</select>
+
+
+<select id="away">
+<option>เลือกทีมเยือน</option>
+</select>
 
 
 <button onclick="analyze()">
