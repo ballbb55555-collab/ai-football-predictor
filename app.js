@@ -92,4 +92,48 @@ ${away}: ${awayPower}%
 <p>⚽ ${over}</p>
 `;
 
+}async function loadTeams(){
+
+let league = document.getElementById("league").value;
+
+if(league==""){
+return;
+}
+
+
+let response = await fetch(
+"http://localhost:3000/teams"
+);
+
+let data = await response.json();
+
+
+let home = document.getElementById("home");
+let away = document.getElementById("away");
+
+
+home.innerHTML = "<option>เลือกทีมเหย้า</option>";
+away.innerHTML = "<option>เลือกทีมเยือน</option>";
+
+
+data.response.forEach(item=>{
+
+
+let h = document.createElement("option");
+h.value = item.team.name;
+h.textContent = item.team.name;
+
+
+let a = document.createElement("option");
+a.value = item.team.name;
+a.textContent = item.team.name;
+
+
+home.appendChild(h);
+away.appendChild(a);
+
+
+});
+
+
 }
