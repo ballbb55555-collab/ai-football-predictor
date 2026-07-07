@@ -1,7 +1,9 @@
 here<!DOCTYPE html>
 <html>
 <head>
-<title>AI FOOTBALL V2</title>
+
+<title>AI FOOTBALL PRO V3</title>
+
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <link rel="stylesheet" href="style.css">
@@ -10,60 +12,60 @@ here<!DOCTYPE html>
 
 <body>
 
-<div class="header">
-⚽ AI FOOTBALL V2
-</div>
-
-<div class="box">
-
-<h3>เลือกการแข่งขัน</h3>
-
-<div class="team">
-
-<div>
-<img id="homeLogo" src="">
-<p id="homeName">เจ้าบ้าน</p>
-</div>
-
-<span>VS</span>
-
-<div>
-<img id="awayLogo" src="">
-<p id="awayName">ทีมเยือน</p>
-</div>
-
-</div>
+<header>
+⚽ AI FOOTBALL PRO
+<p>ระบบวิเคราะห์ฟุตบอลอัจฉริยะ</p>
+</header>
 
 
-<select id="home">
-<option value="">เลือกทีมเหย้า</option>
-</select>
+<div class="container">
 
 
-<select id="away">
-<option value="">เลือกทีมเยือน</option>
-</select>
+<div class="card">
+
+<h2>เลือกการแข่งขัน</h2>
 
 
-<button onclick="predict()">
-🤖 AI วิเคราะห์
+<input 
+id="searchLeague"
+placeholder="ค้นหาลีก เช่น Premier League">
+
+
+<input 
+id="home"
+placeholder="ทีมเหย้า">
+
+
+<input 
+id="away"
+placeholder="ทีมเยือน">
+
+
+<button onclick="analyze()">
+🤖 วิเคราะห์ AI
 </button>
 
 
-<div class="result">
+</div>
+
+
+
+<div class="card">
 
 <h2>ผลวิเคราะห์</h2>
 
-<p id="score">-</p>
-<p id="win">-</p>
-<p id="over">-</p>
+<div id="result">
+
+กรุณาเลือกทีม
 
 </div>
 
 </div>
 
 
-<script src="teams.js"></script>
+</div>
+
+
 <script src="app.js"></script>
 
 </body>
