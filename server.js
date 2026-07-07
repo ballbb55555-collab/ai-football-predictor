@@ -16,7 +16,7 @@ app.get("/teams", async(req,res)=>{
 try{
 
 let data = await axios.get(
-"https://v3.football.api-sports.io/teams?league=39&season=2025",
+"https://v3.football.api-sports.io/teams?league="+league+"&season=2025",
 {
 headers:{
 "x-apisports-key":API_KEY
