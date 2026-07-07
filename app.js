@@ -102,7 +102,7 @@ return;
 
 
 let response = await fetch(
-"http://localhost:3000/teams"
+"http://localhost:3000/teams?league="+league
 );
 
 let data = await response.json();
