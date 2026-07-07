@@ -1,79 +1,78 @@
-function saveData(){
+herefunction predict(){
 
-const data = {
+let home = document.getElementById("home").value;
+let away = document.getElementById("away").value;
 
-home: document.getElementById("home").value,
-away: document.getElementById("away").value,
 
-logo1: document.getElementById("logo1").value,
-logo2: document.getElementById("logo2").value,
+if(home=="" || away==""){
 
-rank: document.getElementById("rank").value,
-
-odds: document.getElementById("price").value,
-
-ou: document.getElementById("overunder").value,
-
-btts: document.getElementById("bttsInput").value,
-
-prediction: document.getElementById("prediction").value,
-
-score: document.getElementById("scoreInput").value
-
-};
-
-localStorage.setItem("matchData", JSON.stringify(data));
-
-loadData();
-
-alert("บันทึกข้อมูลเรียบร้อย");
-}
-
-function loadData(){
-
-const data = JSON.parse(localStorage.getItem("matchData"));
-
-if(!data) return;
-
-document.getElementById("homeName").innerText = data.home || "ทีมเหย้า";
-document.getElementById("awayName").innerText = data.away || "ทีมเยือน";
-
-if(data.logo1)
-document.getElementById("homeLogo").src = data.logo1;
-
-if(data.logo2)
-document.getElementById("awayLogo").src = data.logo2;
-
-document.getElementById("tableRank").innerHTML = data.rank || "-";
-
-document.getElementById("odds").innerHTML = data.odds || "-";
-
-document.getElementById("ou").innerHTML = data.ou || "-";
-
-document.getElementById("btts").innerHTML = data.btts || "-";
-
-if(data.prediction){
-
-let p = data.prediction.split("-");
-
-if(p.length==3){
-
-document.getElementById("predict").innerHTML =
-`เจ้าบ้าน ${p[0]}%<br>
-เสมอ ${p[1]}%<br>
-ทีมเยือน ${p[2]}%`;
+alert("กรุณาเลือกทีมก่อน");
+return;
 
 }
 
+
+if(home==away){
+
+alert("กรุณาเลือกคนละทีม");
+return;
+
 }
 
-if(data.score){
+
+// AI จำลองการวิเคราะห์
+
+let homeScore = Math.floor(Math.random()*3)+1;
+let awayScore = Math.floor(Math.random()*3);
+
+
+let result = "";
+
+if(homeScore > awayScore){
+
+result = "เจ้าบ้านมีโอกาสชนะ";
+
+}
+else if(homeScore < awayScore){
+
+result = "ทีมเยือนมีโอกาสชนะ";
+
+}
+else{
+
+result = "มีโอกาสเสมอ";
+
+}
+
+
+
+let total = homeScore + awayScore;
+
+let over = "";
+
+if(total >=3){
+
+over = "คาดการณ์: สูง 2.5 มีโอกาส";
+
+}
+else{
+
+over = "คาดการณ์: ต่ำ 2.5 มีโอกาส";
+
+}
+
+
 
 document.getElementById("score").innerHTML =
-data.score.replace("-"," - ");
+homeScore+" - "+awayScore;
+
+
+document.getElementById("win").innerHTML =
+"📊 "+result;
+
+
+document.getElementById("over").innerHTML =
+"⚽ "+over;
+
 
 }
-
-}
-
-window.onload = loadData;
