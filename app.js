@@ -1,4 +1,4 @@
-herefunction predict(){
+herefunction analyze(){
 
 let home = document.getElementById("home").value;
 let away = document.getElementById("away").value;
@@ -6,7 +6,9 @@ let away = document.getElementById("away").value;
 
 if(home=="" || away==""){
 
-alert("กรุณาเลือกทีมก่อน");
+document.getElementById("result").innerHTML =
+"⚠️ กรุณาใส่ชื่อทีมก่อน";
+
 return;
 
 }
@@ -14,65 +16,80 @@ return;
 
 if(home==away){
 
-alert("กรุณาเลือกคนละทีม");
+document.getElementById("result").innerHTML =
+"⚠️ กรุณาเลือกคนละทีม";
+
 return;
 
 }
 
 
-// AI จำลองการวิเคราะห์
+// AI จำลองการวิเคราะห์ V3
 
-let homeScore = Math.floor(Math.random()*3)+1;
-let awayScore = Math.floor(Math.random()*3);
+let homePower = Math.floor(Math.random()*40)+60;
+let awayPower = Math.floor(Math.random()*40)+60;
 
 
-let result = "";
+let homeGoal = Math.floor(Math.random()*3);
+let awayGoal = Math.floor(Math.random()*3);
 
-if(homeScore > awayScore){
 
-result = "เจ้าบ้านมีโอกาสชนะ";
+let winner;
 
-}
-else if(homeScore < awayScore){
 
-result = "ทีมเยือนมีโอกาสชนะ";
+if(homePower > awayPower){
 
-}
-else{
-
-result = "มีโอกาสเสมอ";
+winner = home+" มีโอกาสชนะ";
 
 }
+else if(awayPower > homePower){
 
-
-
-let total = homeScore + awayScore;
-
-let over = "";
-
-if(total >=3){
-
-over = "คาดการณ์: สูง 2.5 มีโอกาส";
+winner = away+" มีโอกาสชนะ";
 
 }
 else{
 
-over = "คาดการณ์: ต่ำ 2.5 มีโอกาส";
+winner = "โอกาสเสมอ";
 
 }
 
 
 
-document.getElementById("score").innerHTML =
-homeScore+" - "+awayScore;
+let total = homeGoal + awayGoal;
+
+let over;
 
 
-document.getElementById("win").innerHTML =
-"📊 "+result;
+if(total>=3){
+
+over="สูง 2.5 มีโอกาส";
+
+}else{
+
+over="ต่ำ 2.5 มีโอกาส";
+
+}
 
 
-document.getElementById("over").innerHTML =
-"⚽ "+over;
 
+document.getElementById("result").innerHTML =
+
+`
+<div class="score">
+${homeGoal} - ${awayGoal}
+</div>
+
+<p>🏆 ${winner}</p>
+
+<p>📊 ความแข็งแกร่ง</p>
+
+<p>
+${home}: ${homePower}%
+<br>
+${away}: ${awayPower}%
+</p>
+
+<p>⚽ ${over}</p>
+`;
 
 }
