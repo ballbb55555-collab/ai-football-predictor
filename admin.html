@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI Football Admin</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<header>
+🔐 ADMIN PANEL
+</header>
+
+
+<div class="card">
+
+<h2 class="title">เพิ่มคู่บอล</h2>
+
+<input id="home" placeholder="ทีมเหย้า">
+
+<input id="away" placeholder="ทีมเยือน">
+
+<input id="logo1" placeholder="โลโก้ทีมเหย้า URL">
+
+<input id="logo2" placeholder="โลโก้ทีมเยือน URL">
+
+
+<input id="odds" placeholder="ราคาบอล">
+
+<input id="ou" placeholder="สูงต่ำ">
+
+<input id="btts" placeholder="BTTS">
+
+
+<button onclick="saveMatch()">
+บันทึกข้อมูล
+</button>
+
+
+</div>
+
+
+
+<div class="card">
+
+<h2 class="title">
+ข้อมูลที่บันทึก
+</h2>
+
+<div id="result">
+ยังไม่มีข้อมูล
+</div>
+
+</div>
+
+
+
+<script>
+
+function saveMatch(){
+
+let data = {
+
+home:document.getElementById("home").value,
+
+away:document.getElementById("away").value,
+
+logo1:document.getElementById("logo1").value,
+
+logo2:document.getElementById("logo2").value,
+
+odds:document.getElementById("odds").value,
+
+ou:document.getElementById("ou").value,
+
+btts:document.getElementById("btts").value
+
+};
+
+
+localStorage.setItem(
+"matchData",
+JSON.stringify(data)
+);
+
+
+document.getElementById("result").innerHTML=
+
+data.home+" VS "+data.away+
+"<br>ราคา: "+data.odds+
+"<br>สูงต่ำ: "+data.ou+
+"<br>BTTS: "+data.btts;
+
+
+alert("บันทึกแล้ว");
+
+}
+
+
+</script>
+
+
+</body>
+</html>
