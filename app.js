@@ -122,12 +122,12 @@ data.response.forEach(item=>{
 let h = document.createElement("option");
 h.value = item.team.name;
 h.textContent = item.team.name;
-
+h.dataset.logo = item.team.logo;
 
 let a = document.createElement("option");
 a.value = item.team.name;
 a.textContent = item.team.name;
-
+a.dataset.logo = item.team.logo;
 
 home.appendChild(h);
 away.appendChild(a);
