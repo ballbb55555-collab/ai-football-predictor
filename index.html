@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Football Analyst</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+
+<header>
+    <h1>🤖 AI FOOTBALL ANALYST ⚽</h1>
+</header>
+
+<div class="container">
+
+<div class="card">
+
+<div class="teams">
+
+<div class="team">
+<img id="homeLogo" src="https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg">
+<h2 id="homeName">ทีมเหย้า</h2>
+</div>
+
+<div class="vs">VS</div>
+
+<div class="team">
+<img id="awayLogo" src="https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg">
+<h2 id="awayName">ทีมเยือน</h2>
+</div>
+
+</div>
+
+<div class="info">
+<div class="box">
+<h3>📊 ตารางคะแนน</h3>
+<p id="tableRank">อันดับ 1 VS อันดับ 2</p>
+</div>
+
+<div class="box">
+<h3>💰 ราคาบอล</h3>
+<p id="odds">-0.5</p>
+</div>
+
+<div class="box">
+<h3>⚽ สูง / ต่ำ</h3>
+<p id="ou">2.5</p>
+</div>
+
+<div class="box">
+<h3>🔥 BTTS</h3>
+<p id="btts">YES 60%</p>
+</div>
+
+<div class="box prediction">
+
+<h2>🤖 AI Prediction</h2>
+
+<p id="predict">
+เจ้าบ้าน 45%<br>
+เสมอ 30%<br>
+ทีมเยือน 25%
+</p>
+
+<h1 id="score">2 - 1</h1>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="card admin">
+
+<h2>🔐 ADMIN PANEL</h2>
+
+<input id="home" placeholder="ชื่อทีมเหย้า">
+
+<input id="away" placeholder="ชื่อทีมเยือน">
+
+<input id="logo1" placeholder="URL โลโก้ทีมเหย้า">
+
+<input id="logo2" placeholder="URL โลโก้ทีมเยือน">
+
+<input id="rank" placeholder="อันดับ เช่น 1 VS 3">
+
+<input id="price" placeholder="ราคาบอล">
+
+<input id="overunder" placeholder="สูงต่ำ">
+
+<input id="bttsInput" placeholder="BTTS">
+
+<input id="prediction" placeholder="เช่น 45-30-25">
+
+<input id="scoreInput" placeholder="สกอร์ เช่น 2-1">
+
+<button onclick="saveData()">
+บันทึกข้อมูล
+</button>
+
+</div>
+
+</div>
+
+<script src="app.js"></script>
+
+</body>
+</html>
