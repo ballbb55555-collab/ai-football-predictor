@@ -145,82 +145,89 @@ let games=[];
 
 
 // โหลดโปรแกรม
-
 function loadMatches(){
 
+document.getElementById("matches").innerHTML =
+"⏳ กำลังโหลดหลายลีก...";
 
-document.getElementById("matches").innerHTML=
-"⏳ กำลังโหลด...";
+
+let leagues = [
+4328, // พรีเมียร์ลีก
+4335, // ลาลีกา
+4331, // บุนเดสลีกา
+4332, // เซเรียอา
+4334  // ลีกเอิง
+];
 
 
-let today =
-new Date().toISOString().slice(0,10);
-let league =
-document.getElementById("league").value;
+let requests = leagues.map(id =>
 
 fetch(
-`https://www.thesportsdb.com/api/v1/json/3/eventsnextleague.php?id=${league}`
+`https://www.thesportsdb.com/api/v1/json/3/eventsnextleague.php?id=${id}`
 )
-.then(res=>res.json())
+.then(r=>r.json())
+
+);
 
 
-.then(data=>{
+
+Promise.all(requests)
+
+.then(results=>{
 
 
-games=data.events || [];
+games=[];
 
-
+let html="";
 let option="";
-let list="";
 
 
+results.forEach(data=>{
 
-games.forEach((m,i)=>{
+
+if(data.events){
 
 
-option+=`
+data.events.forEach(m=>{
 
-<option value="${i}">
+
+games.push(m);
+
+
+let index = games.length-1;
+
+
+option +=`
+
+<option value="${index}">
 ${m.strHomeTeam} VS ${m.strAwayTeam}
 </option>
 
 `;
 
 
-
-list+=`
+html +=`
 
 <div class="card">
 
-<div class="team">
-${m.strHomeTeam}
+⚽ ${m.strHomeTeam}
+
 <br>
+
 VS
+
 <br>
-${m.strAwayTeam}
-</div>
 
-
-<div class="score">
-
-${m.intHomeScore ?? "-"}
- -
-${m.intAwayScore ?? "-"}
-
-</div>
-
-
-<div class="green">
-
-${m.strStatus || "Scheduled"}
-
-</div>
-
+⚽ ${m.strAwayTeam}
 
 </div>
 
 `;
 
+});
+
+
+}
 
 
 });
@@ -228,12 +235,11 @@ ${m.strStatus || "Scheduled"}
 
 
 document.getElementById("match").innerHTML =
-option || "<option>ไม่มีคู่แข่ง</option>";
-
+option || "<option>ไม่มีคู่</option>";
 
 
 document.getElementById("matches").innerHTML =
-list || "วันนี้ไม่มีข้อมูล";
+html || "ไม่มีโปรแกรม";
 
 
 
@@ -243,7 +249,7 @@ list || "วันนี้ไม่มีข้อมูล";
 .catch(()=>{
 
 
-document.getElementById("matches").innerHTML=
+document.getElementById("matches").innerHTML =
 "❌ โหลดข้อมูลไม่ได้";
 
 
@@ -251,142 +257,3 @@ document.getElementById("matches").innerHTML=
 
 
 }
-
-
-
-// AI วิเคราะห์
-
-function analysis(){
-
-
-let id=
-document.getElementById("match").value;
-
-
-let game=
-games[id];
-
-
-
-if(!game){
-
-
-document.getElementById("result").innerHTML=
-"กรุณาโหลดโปรแกรมก่อน";
-
-
-return;
-
-}
-
-
-
-let home =
-Math.floor(Math.random()*4);
-
-
-let away =
-Math.floor(Math.random()*4);
-
-
-
-let winHome =
-Math.floor(Math.random()*30)+50;
-
-
-let winAway =
-Math.floor(Math.random()*25)+20;
-
-
-let draw =
-100-winHome-winAway;
-
-
-
-let over =
-(home+away)>=3
-?
-"🔥 สูง 2.5 มีโอกาส"
-:
-"🧊 ต่ำ 2.5 มีโอกาส";
-
-
-
-let btts =
-(home>0 && away>0)
-?
-"✅ ยิงกันทั้งสองทีม"
-:
-"❌ BTTS ต่ำ";
-
-
-
-let result="";
-
-
-if(home>away)
-result="🏠 เจ้าบ้านได้เปรียบ";
-
-else if(home<away)
-result="🚀 ทีมเยือนได้เปรียบ";
-
-else
-result="🤝 มีโอกาสเสมอ";
-
-
-
-
-document.getElementById("result").innerHTML=
-
-
-"🧠 FINAL AI RESULT<br><br>"+
-
-
-game.strHomeTeam+
-" VS "+
-game.strAwayTeam+
-
-"<br><br>"+
-
-
-"📊 WIN PROBABILITY<br>"+
-"🏠 "+winHome+"%<br>"+
-"🤝 "+draw+"%<br>"+
-"🚀 "+winAway+"%"+
-
-
-"<br><br>"+
-
-
-"🎯 SCORE PREDICT"+
-
-"<div class='score'>"+
-home+
-" - "+
-away+
-"</div>"+
-
-
-result+
-
-"<br><br>"+
-
-over+
-"<br>"+
-btts+
-
-"<br><br>"+
-
-"🔥 AI CONFIDENCE "+
-(Math.floor(Math.random()*20)+75)+
-"%";
-
-
-}
-
-
-</script>
-
-
-</body>
-</html>
